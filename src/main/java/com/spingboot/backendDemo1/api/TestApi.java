@@ -7,6 +7,7 @@ import com.spingboot.backendDemo1.model.TestResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
@@ -49,5 +50,12 @@ public class TestApi {
         response = business.register(request);
         return ResponseEntity.ok(response);
     }
+
+    @PostMapping
+    public ResponseEntity<String> uploadProfilePicture(@RequestPart MultipartFile file) throws BaseException {
+        String response = business.uploadProfilePicture(file);
+        return ResponseEntity.ok(response);
+    }
+
 
 }
