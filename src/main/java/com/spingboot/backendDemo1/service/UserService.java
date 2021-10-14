@@ -1,10 +1,11 @@
-package com.spingboot.backendDemo1.Service;
+package com.spingboot.backendDemo1.service;
 
 
-import com.spingboot.backendDemo1.Repository.UserRepository;
+import com.spingboot.backendDemo1.repository.UserRepository;
 import com.spingboot.backendDemo1.entity.User;
 import com.spingboot.backendDemo1.exception.BaseException;
 import com.spingboot.backendDemo1.exception.UserException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -14,8 +15,11 @@ public class UserService {
 
     private UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     //Function Create User
@@ -39,11 +43,10 @@ public class UserService {
             throw UserException.createEmailDuplicated();
         }
 
-
         //save
         User entity = new User();
         entity.setEmail(email);
-        entity.setPassword(password);
+        entity.setPassword(passwordEncoder.encode(password));
         entity.setName(name);
 
         return repository.save(entity);

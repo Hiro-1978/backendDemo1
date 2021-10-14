@@ -1,4 +1,4 @@
-package com.spingboot.backendDemo1.Repository;
+package com.spingboot.backendDemo1.repository;
 
 import com.spingboot.backendDemo1.entity.User;
 import org.springframework.data.repository.CrudRepository;

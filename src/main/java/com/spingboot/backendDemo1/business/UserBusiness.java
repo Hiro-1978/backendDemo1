@@ -1,6 +1,6 @@
 package com.spingboot.backendDemo1.business;
 
-import com.spingboot.backendDemo1.Service.UserService;
+import com.spingboot.backendDemo1.service.UserService;
 import com.spingboot.backendDemo1.entity.User;
 import com.spingboot.backendDemo1.exception.BaseException;
 import com.spingboot.backendDemo1.exception.FileException;
