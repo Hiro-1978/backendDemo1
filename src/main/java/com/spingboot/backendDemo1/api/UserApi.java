@@ -1,34 +1,33 @@
 package com.spingboot.backendDemo1.api;
 
-import com.spingboot.backendDemo1.business.TestBusiness;
+import com.spingboot.backendDemo1.business.UserBusiness;
+import com.spingboot.backendDemo1.entity.User;
 import com.spingboot.backendDemo1.exception.BaseException;
 import com.spingboot.backendDemo1.model.MRegisterRequest;
 import com.spingboot.backendDemo1.model.TestResponse;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-
 @RestController
-@RequestMapping("/test")
-public class TestApi {
+@RequestMapping("/user")
+public class UserApi {
     /*
     //Method: 1 => Field Injection
     @Autowired
     private TestBusiness business;
     */
     //Method: 2 => Constructor Injection *Code ยาวกว่า แต่ทำงานได้เร็วกว่า
-    private final TestBusiness business; // กด Alt+Enter
+    private final UserBusiness business; // กด Alt+Enter
 
-    public TestApi(TestBusiness business) {
+    public UserApi(UserBusiness business) {
         this.business = business;
     }
 
     @GetMapping
-    public TestResponse test(){
+    public TestResponse test() {
         TestResponse response = new TestResponse();
+        response.setName("www");
         response.setName("Hiro");
         response.setFood("KFC");
         return response;
@@ -45,9 +44,8 @@ public class TestApi {
 
     @PostMapping
     @RequestMapping("/register")
-    public ResponseEntity<String> register(@RequestBody MRegisterRequest request) throws BaseException {
-        String response = null;
-        response = business.register(request);
+    public ResponseEntity<User> register(@RequestBody MRegisterRequest request) throws BaseException {
+        User response = business.register(request);
         return ResponseEntity.ok(response);
     }
 

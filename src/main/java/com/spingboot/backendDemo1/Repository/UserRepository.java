@@ -9,4 +9,6 @@ public interface UserRepository extends CrudRepository<User, String> {
 
     Optional<User> findByEmail(String email); //เขียนคำสั่งค้นหาเพิ่มจาก Email
 
+    boolean existsByEmail(String email);
+
 }
