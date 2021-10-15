@@ -1,10 +1,10 @@
 package com.spingboot.backendDemo1.api;
 
 import com.spingboot.backendDemo1.business.UserBusiness;
-import com.spingboot.backendDemo1.entity.User;
 import com.spingboot.backendDemo1.exception.BaseException;
+import com.spingboot.backendDemo1.model.MLoginRequest;
 import com.spingboot.backendDemo1.model.MRegisterRequest;
-import com.spingboot.backendDemo1.model.TestResponse;
+import com.spingboot.backendDemo1.model.MRegisterResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,40 +12,22 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/user")
 public class UserApi {
-    /*
-    //Method: 1 => Field Injection
-    @Autowired
-    private TestBusiness business;
-    */
-    //Method: 2 => Constructor Injection *Code ยาวกว่า แต่ทำงานได้เร็วกว่า
+
     private final UserBusiness business; // กด Alt+Enter
 
     public UserApi(UserBusiness business) {
         this.business = business;
     }
 
-    @GetMapping
-    public TestResponse test() {
-        TestResponse response = new TestResponse();
-        response.setName("www");
-        response.setName("Hiro");
-        response.setFood("KFC");
-        return response;
+    @PostMapping("login")
+    public ResponseEntity<String> login(@RequestBody MLoginRequest request) throws BaseException {
+        String response = business.login(request);
+        return ResponseEntity.ok(response);
     }
 
-   /* @GetMapping
-    @RequestMapping("/test2")
-    public TestResponse test2(){
-        TestResponse response = new TestResponse();
-        response.setName("Hiro 2");
-        response.setFood("KFC 2");
-        return response;
-    } */
-
-    @PostMapping
-    @RequestMapping("/register")
-    public ResponseEntity<User> register(@RequestBody MRegisterRequest request) throws BaseException {
-        User response = business.register(request);
+    @PostMapping("/register")
+    public ResponseEntity<MRegisterResponse> register(@RequestBody MRegisterRequest request) throws BaseException {
+        MRegisterResponse response = business.register(request);
         return ResponseEntity.ok(response);
     }
 
