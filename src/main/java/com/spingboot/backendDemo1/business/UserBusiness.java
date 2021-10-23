@@ -4,11 +4,15 @@ import com.spingboot.backendDemo1.exception.UserException;
 import com.spingboot.backendDemo1.mapper.UserMapper;
 import com.spingboot.backendDemo1.model.MLoginRequest;
 import com.spingboot.backendDemo1.model.MRegisterResponse;
+import com.spingboot.backendDemo1.service.TokenService;
 import com.spingboot.backendDemo1.service.UserService;
 import com.spingboot.backendDemo1.entity.User;
 import com.spingboot.backendDemo1.exception.BaseException;
 import com.spingboot.backendDemo1.exception.FileException;
 import com.spingboot.backendDemo1.model.MRegisterRequest;
+
+
+import com.spingboot.backendDemo1.util.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,10 +25,13 @@ public class UserBusiness { // สร้างเพื่อเรียกใ�
 
     private final UserService userService;
 
+    private final TokenService tokenService;
+
     private final UserMapper userMapper;
 
-    public UserBusiness(UserService userService, UserMapper userMapper) {
+    public UserBusiness(UserService userService, TokenService tokenService, UserMapper userMapper) {
         this.userService = userService;
+        this.tokenService = tokenService;
         this.userMapper = userMapper;
     }
 
@@ -45,10 +52,25 @@ public class UserBusiness { // สร้างเพื่อเรียกใ�
         }
 
         // Todo: generate JWT
-        String token = "JWT TO DO";
-        return token;
+            return tokenService.tokenize(user);
     }
 
+    public String refreshToken() throws BaseException {
+        Optional<String> opt = SecurityUtil.getCurrentUserId();
+        if (opt.isEmpty()) {
+            throw UserException.unauthorized();
+        }
+
+        String userId = opt.get();
+
+        Optional<User> optUser = userService.findById(userId);
+        if (optUser.isEmpty()) {
+            throw UserException.notFound();
+        }
+
+        User user = optUser.get();
+        return tokenService.tokenize(user);
+    }
     public MRegisterResponse register(MRegisterRequest request) throws BaseException {
         User user = userService.create(request.getEmail(), request.getPassword(), request.getName());
         // Todo MApper

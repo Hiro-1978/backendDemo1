@@ -1,10 +1,10 @@
 package com.spingboot.backendDemo1.service;
 
 
-import com.spingboot.backendDemo1.repository.UserRepository;
 import com.spingboot.backendDemo1.entity.User;
 import com.spingboot.backendDemo1.exception.BaseException;
 import com.spingboot.backendDemo1.exception.UserException;
+import com.spingboot.backendDemo1.repository.UserRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,32 +15,35 @@ import java.util.Optional;
 @Service
 public class UserService {
 
-    private UserRepository repository;
-
     private final PasswordEncoder passwordEncoder;
+    private UserRepository repository;
 
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Optional<User> findByEmail(String email){
-       return repository.findByEmail(email);
+    public Optional<User> findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 
-    public User update(User user){
+    public User update(User user) {
         return repository.save(user);
     }
 
     public User updateName(String id, String name) throws UserException {
         Optional<User> opt = repository.findById(id);
-        if(opt.equals(null)){
+        if (opt.equals(null)) {
             throw UserException.notFound();
         }
         User user = opt.get();
         user.setName(name);
 
         return repository.save(user);
+    }
+
+    public Optional<User> findById(String id) {
+        return repository.findById(id);
     }
 
     @CacheEvict(value = "user", key = "#id")
@@ -53,7 +56,7 @@ public class UserService {
 
     }
 
-    public boolean matchPassword(String rawPassword, String encodedPassword){
+    public boolean matchPassword(String rawPassword, String encodedPassword) {
         return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 
@@ -86,4 +89,5 @@ public class UserService {
 
         return repository.save(entity);
     }
+
 }
