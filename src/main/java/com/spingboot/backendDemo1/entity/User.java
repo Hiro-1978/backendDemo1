@@ -4,8 +4,8 @@ package com.spingboot.backendDemo1.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -22,4 +22,12 @@ public class User extends BaseEntity {
     private String name;
 
     private String civilId;
+
+    //การ Join Table Database
+    @OneToOne(mappedBy = "user", orphanRemoval = true) // ลบแม่ แล้วลูกหายไปด้วย
+    private Social social;
+
+    //การ Join แบบ One to Many
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<Address> adresses;
 }
