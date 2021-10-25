@@ -1,5 +1,16 @@
 port: 8081
 spring:
+  mail:
+    host: smpt.gmail.com
+    port: 587
+    user: xxxxx
+    password: xxxxxx
+    properties:
+      mail:
+        smpt:
+          auth: true
+          starttls:
+            enable: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,4 +28,6 @@ app:
   token:
     secret: m#MySecretGGWP2021
     issuer: BackendService
+  email:
+    from: xxxxx@gmail.com
 
